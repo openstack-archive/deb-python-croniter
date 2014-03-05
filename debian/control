@@ -24,7 +24,7 @@ Homepage: http://github.com/kiorky/croniter
 Package: python-croniter
 Architecture: all
 Pre-Depends: dpkg (>= 1.15.6~)
-Depends: ${misc:Depends}, ${python:Depends}
+Depends: python-dateutil, python-tz, ${misc:Depends}, ${python:Depends}
 Description: provides iteration for datetime object with cron like format - Python 2.x
  Croniter is a Python module to provide iteration for datetime object. Given a
  cron tab text entry as input, it Croniter will output all the dates matching
@@ -35,7 +35,7 @@ Description: provides iteration for datetime object with cron like format - Pyth
 Package: python3-croniter
 Architecture: all
 Pre-Depends: dpkg (>= 1.15.6~)
-Depends: ${misc:Depends}, ${python3:Depends}
+Depends: python3-dateutil, python3-tz, ${misc:Depends}, ${python3:Depends}
 Description: provides iteration for datetime object with cron like format - Python 3.x
  Croniter is a Python module to provide iteration for datetime object. Given a
  cron tab text entry as input, it Croniter will output all the dates matching
