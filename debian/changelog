@@ -1,0 +1,5 @@
+python-croniter (0.3.4-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #740805)
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 05 Mar 2014 15:16:08 +0800
