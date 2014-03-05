@@ -10,10 +10,12 @@ Build-Depends: debhelper (>= 9),
                python-dateutil,
                python-nose,
                python-setuptools,
+               python-tz,
                python3-all,
                python3-dateutil,
                python3-nose,
-               python3-setuptools
+               python3-setuptools,
+               python3-tz
 Standards-Version: 3.9.5
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=openstack/python-croniter.git
 Vcs-Git: git://anonscm.debian.org/openstack/python-croniter.git
