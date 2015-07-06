@@ -3,6 +3,7 @@
 
 import unittest
 from datetime import datetime
+from time import sleep
 import pytz
 from croniter import croniter
 
@@ -169,6 +170,17 @@ class CroniterTest(base.TestCase):
         self.assertRaises(ValueError, croniter, '* * * *')
         self.assertRaises(ValueError, croniter, '* * 5-1 * *')
         self.assertRaises(KeyError, croniter, '* * * janu-jun *')
+
+    def testSundayToThursdayWithAlphaConversion(self):
+        base = datetime(2010, 8, 25, 15, 56) #wednesday
+        itr = croniter("30 22 * * sun-thu", base)
+        next = itr.get_next(datetime)
+
+        self.assertEqual(base.year, next.year)
+        self.assertEqual(base.month, next.month)
+        self.assertEqual(base.day, next.day)
+        self.assertEqual(22, next.hour)
+        self.assertEqual(30, next.minute)
 
     def testPrevMinute(self):
         base = datetime(2010, 8, 25, 15, 56)
@@ -391,6 +403,58 @@ class CroniterTest(base.TestCase):
         itr2 = croniter('* * * * *', tokyo.localize(base))
         n2 = itr2.get_next(datetime)
         self.assertEqual(n2.tzinfo.zone, 'Asia/Tokyo')
+
+    def testInitNoStartTime(self):
+        itr = croniter('* * * * *')
+        sleep(.01)
+        itr2 = croniter('* * * * *')
+        self.assertGreater(itr2.cur, itr.cur)
+
+    def assertScheduleTimezone(self, callback, expected_schedule):
+        for expected_date, expected_offset in expected_schedule:
+            d = callback()
+            self.assertEqual(expected_date, d.replace(tzinfo=None))
+            self.assertEqual(expected_offset, d.utcoffset().total_seconds())
+
+    def testTimezoneWinterTime(self):
+        tz = pytz.timezone('Europe/Athens')
+
+        expected_schedule = [
+            (datetime(2013, 10, 27, 2, 30, 0), 10800),
+            (datetime(2013, 10, 27, 3, 0, 0), 10800),
+            (datetime(2013, 10, 27, 3, 30, 0), 10800),
+            (datetime(2013, 10, 27, 3, 0, 0), 7200),
+            (datetime(2013, 10, 27, 3, 30, 0), 7200),
+            (datetime(2013, 10, 27, 4, 0, 0), 7200),
+            (datetime(2013, 10, 27, 4, 30, 0), 7200),
+            ]
+
+        start = datetime(2013, 10, 27, 2, 0, 0)
+        ct = croniter('*/30 * * * *', tz.localize(start))
+        self.assertScheduleTimezone(lambda: ct.get_next(datetime), expected_schedule)
+
+        start = datetime(2013, 10, 27, 5, 0, 0)
+        ct = croniter('*/30 * * * *', tz.localize(start))
+        self.assertScheduleTimezone(lambda: ct.get_prev(datetime), reversed(expected_schedule))
+
+    def testTimezoneSummerTime(self):
+        tz = pytz.timezone('Europe/Athens')
+
+        expected_schedule = [
+            (datetime(2013, 3, 31, 1, 30, 0), 7200),
+            (datetime(2013, 3, 31, 2, 0, 0), 7200),
+            (datetime(2013, 3, 31, 2, 30, 0), 7200),
+            (datetime(2013, 3, 31, 4, 0, 0), 10800),
+            (datetime(2013, 3, 31, 4, 30, 0), 10800),
+            ]
+
+        start = datetime(2013, 3, 31, 1, 0, 0)
+        ct = croniter('*/30 * * * *', tz.localize(start))
+        self.assertScheduleTimezone(lambda: ct.get_next(datetime), expected_schedule)
+
+        start = datetime(2013, 3, 31, 5, 0, 0)
+        ct = croniter('*/30 * * * *', tz.localize(start))
+        self.assertScheduleTimezone(lambda: ct.get_prev(datetime), reversed(expected_schedule))
 
 
 if __name__ == '__main__':
