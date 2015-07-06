@@ -2,29 +2,30 @@ Source: python-croniter
 Section: python
 Priority: optional
 Maintainer: PKG OpenStack <openstack-devel@lists.alioth.debian.org>
-Uploaders: Julien Danjou <acid@debian.org>,
-           Thomas Goirand <zigo@debian.org>,
-           Mehdi Abaakouk <sileht@sileht.net>
+Uploaders: Thomas Goirand <zigo@debian.org>,
 Build-Depends: debhelper (>= 9),
-               python-all (>= 2.6.6-3~),
-               python-dateutil,
-               python-nose,
+               dh-python,
+               python-all,
                python-setuptools,
-               python-tz,
                python3-all,
-               python3-dateutil,
-               python3-nose,
                python3-setuptools,
-               python3-tz
-Standards-Version: 3.9.5
+Build-Depends-Indep: python-dateutil,
+                     python-nose,
+                     python-tz,
+                     python3-dateutil,
+                     python3-nose,
+                     python3-tz,
+Standards-Version: 3.9.6
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=openstack/python-croniter.git
 Vcs-Git: git://anonscm.debian.org/openstack/python-croniter.git
 Homepage: http://github.com/kiorky/croniter
 
 Package: python-croniter
 Architecture: all
-Pre-Depends: dpkg (>= 1.15.6~)
-Depends: python-dateutil, python-tz, ${misc:Depends}, ${python:Depends}
+Depends: python-dateutil,
+         python-tz,
+         ${misc:Depends},
+         ${python:Depends},
 Description: provides iteration for datetime object with cron like format - Python 2.x
  Croniter is a Python module to provide iteration for datetime object. Given a
  cron tab text entry as input, it Croniter will output all the dates matching
@@ -34,8 +35,10 @@ Description: provides iteration for datetime object with cron like format - Pyth
 
 Package: python3-croniter
 Architecture: all
-Pre-Depends: dpkg (>= 1.15.6~)
-Depends: python3-dateutil, python3-tz, ${misc:Depends}, ${python3:Depends}
+Depends: python3-dateutil,
+         python3-tz,
+         ${misc:Depends},
+         ${python3:Depends},
 Description: provides iteration for datetime object with cron like format - Python 3.x
  Croniter is a Python module to provide iteration for datetime object. Given a
  cron tab text entry as input, it Croniter will output all the dates matching
