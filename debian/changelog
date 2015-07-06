@@ -3,6 +3,7 @@ python-croniter (0.3.8-1) unstable; urgency=medium
   [ Thomas Goirand ]
   * New upstream release (Closes: #790786).
   * Reviewed (build-)depends.
+  * Fixed watch file to use git tag instead of PyPi.
 
   [ Alexandre Viau ]
   * Changed watch url for pypi.debian.net
