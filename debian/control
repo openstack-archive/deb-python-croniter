@@ -18,7 +18,7 @@ Build-Depends-Indep: python-dateutil,
 Standards-Version: 3.9.6
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=openstack/python-croniter.git
 Vcs-Git: git://anonscm.debian.org/openstack/python-croniter.git
-Homepage: http://github.com/kiorky/croniter
+Homepage: https://github.com/kiorky/croniter
 
 Package: python-croniter
 Architecture: all
