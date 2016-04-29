@@ -1,5 +1,6 @@
-python-croniter (0.3.8-2) UNRELEASED; urgency=medium
+python-croniter (0.3.12-1) UNRELEASED; urgency=medium
 
+  * New upstream release.
   * Fixed homepage (https).
   * Fixed VCS URLs (https).
 
