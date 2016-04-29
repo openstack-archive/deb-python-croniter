@@ -4,6 +4,7 @@ python-croniter (0.3.12-1) UNRELEASED; urgency=medium
   * Fixed homepage, VCS, GIT and source URL (https).
   * Standards-Version is 3.9.8 now (no change).
   * Added simple Debian tests.
+  * Rearranged order of d/copyright.
 
  -- Ondřej Nový <novy@ondrej.org>  Sun, 28 Feb 2016 15:34:52 +0100
 
