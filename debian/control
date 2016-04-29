@@ -15,7 +15,7 @@ Build-Depends-Indep: python-dateutil,
                      python3-dateutil,
                      python3-nose,
                      python3-tz,
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Vcs-Browser: https://anonscm.debian.org/cgit/openstack/python-croniter.git/
 Vcs-Git: https://anonscm.debian.org/git/openstack/python-croniter.git
 Homepage: https://github.com/kiorky/croniter

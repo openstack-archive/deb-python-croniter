@@ -3,6 +3,7 @@ python-croniter (0.3.12-1) UNRELEASED; urgency=medium
   * New upstream release.
   * Fixed homepage (https).
   * Fixed VCS URLs (https).
+  * Standards-Version is 3.9.8 now (no change).
 
  -- Ondřej Nový <novy@ondrej.org>  Sun, 28 Feb 2016 15:34:52 +0100
 
