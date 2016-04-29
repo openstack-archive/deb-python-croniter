@@ -52,7 +52,8 @@ class croniter(object):
     bad_length = 'Exactly 5 or 6 columns has to be specified for iterator' \
                  'expression.'
 
-    def __init__(self, expr_format, start_time=None):
+    def __init__(self, expr_format, start_time=None, ret_type=float):
+        self._ret_type = ret_type
         if start_time is None:
             start_time = time()
 
@@ -137,13 +138,14 @@ class croniter(object):
                             else res)
         self.expanded = expanded
 
-    def get_next(self, ret_type=float):
-        return self._get_next(ret_type, is_prev=False)
+    def get_next(self, ret_type=None):
+        return self._get_next(ret_type or self._ret_type, is_prev=False)
 
-    def get_prev(self, ret_type=float):
-        return self._get_next(ret_type, is_prev=True)
+    def get_prev(self, ret_type=None):
+        return self._get_next(ret_type or self._ret_type, is_prev=True)
 
-    def get_current(self, ret_type=float):
+    def get_current(self, ret_type=None):
+        ret_type = ret_type or self._ret_type
         if ret_type == datetime.datetime:
             return self._timestamp_to_datetime(self.cur)
         return self.cur
@@ -155,7 +157,7 @@ class croniter(object):
         if d.tzinfo is not None:
             d = d.replace(tzinfo=None) - d.utcoffset()
 
-        return (d - datetime.datetime(1970, 1, 1)).total_seconds()
+        return self._timedelta_to_seconds(d - datetime.datetime(1970, 1, 1))
 
     def _timestamp_to_datetime(self, timestamp):
         """
@@ -167,6 +169,17 @@ class croniter(object):
 
         return result
 
+    @classmethod
+    def _timedelta_to_seconds(cls, td):
+        """
+        Converts a 'datetime.timedelta' object `td` into seconds contained in
+        the duration.
+        Note: We cannot use `timedelta.total_seconds()` because this is not
+        supported by Python 2.6.
+        """
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) \
+            / 10**6
+
     # iterator protocol, to enable direct use of croniter
     # objects in a loop, like "for dt in croniter('5 0 * * *'): ..."
     # or for combining multiple croniters into single
@@ -175,23 +188,25 @@ class croniter(object):
         return self
     __next__ = next = get_next
 
-    def all_next(self, ret_type=float):
+    def all_next(self, ret_type=None):
         '''Generator of all consecutive dates. Can be used instead of
         implicit call to __iter__, whenever non-default
         'ret_type' has to be specified.
         '''
         while True:
-            yield self._get_next(ret_type, is_prev=False)
+            yield self._get_next(ret_type or self._ret_type, is_prev=False)
 
-    def all_prev(self, ret_type=float):
+    def all_prev(self, ret_type=None):
         '''Generator of all previous dates.'''
         while True:
-            yield self._get_next(ret_type, is_prev=True)
+            yield self._get_next(ret_type or self._ret_type, is_prev=True)
 
     iter = all_next  # alias, you can call .iter() instead of .all_next()
 
-    def _get_next(self, ret_type=float, is_prev=False):
+    def _get_next(self, ret_type=None, is_prev=False):
         expanded = self.expanded[:]
+
+        ret_type = ret_type or self._ret_type
 
         if ret_type not in (float, datetime.datetime):
             raise TypeError("Invalid ret_type, only 'float' or 'datetime' "
@@ -260,6 +275,8 @@ class croniter(object):
                 days = DAYS[month - 1]
                 if month == 2 and self.is_leap(year) is True:
                     days += 1
+                if 'l' in expanded[2] and days==d.day:
+                    return False, d
 
                 if is_prev:
                     days_in_prev_month = DAYS[
@@ -339,6 +356,7 @@ class croniter(object):
             for proc in procs:
                 (changed, dst) = proc(dst)
                 if changed:
+                    day, month, year = dst.day, dst.month, dst.year
                     next = True
                     break
             if next:
@@ -375,8 +393,10 @@ class croniter(object):
         candidates = to_check[:]
         candidates.reverse()
         for d in candidates:
-            if d <= x:
+            if d != 'l' and d <= x:
                 return d - x
+        if 'l' in candidates:
+            return -x
         candidate = candidates[0]
         for c in candidates:
             if c < range_val:

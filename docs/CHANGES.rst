@@ -1,10 +1,35 @@
 Changelog
 ==============
 
+0.3.12 (2016-03-10)
+-------------------
+- support setting ret_type in __init__ [Brent Tubbs <brent.tubbs@gmail.com>]
+
+0.3.11 (2016-01-13)
+-------------------
+
+- Bug fix: The get_prev API crashed when last day of month token was used. Some
+  essential logic was missing.
+  [Iddo Aviram <iddo.aviram@similarweb.com>]
+
+
+0.3.10 (2015-11-29)
+-------------------
+
+- The fuctionality of 'l' as day of month was broken, since the month variable
+  was not properly updated
+  [Iddo Aviram <iddo.aviram@similarweb.com>]
+
+0.3.9 (2015-11-19)
+------------------
+
+- Don't use datetime functions python 2.6 doesn't support
+  [petervtzand]
+
 0.3.8 (2015-06-23)
 ------------------
 - Truncate microseconds by setting to 0
-  [Corey Wright <corey.wright@rackspace.com>]
+  [Corey Wright]
 
 
 0.3.7 (2015-06-01)
