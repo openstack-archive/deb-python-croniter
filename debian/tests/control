@@ -1,0 +1,5 @@
+Depends: python-croniter
+Test-Command: cd "$ADTTMP" ; python -c "import croniter ; print croniter"
+
+Depends: python3-croniter
+Test-Command: cd "$ADTTMP" ; python3 -c "import croniter ; print(croniter)"
